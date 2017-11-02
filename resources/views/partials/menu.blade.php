@@ -3,18 +3,30 @@
         <li>
             @if(url()->isValidUrl($item['uri']))
                 <a href="{{ $item['uri'] }}" target="_blank">
-            @else
-                 <a href="{{ admin_base_path($item['uri']) }}">
-            @endif
-                <i class="fa {{$item['icon']}}"></i>
-                <span>{{$item['title']}}</span>
-            </a>
+                    @else
+                        <a href="{{ admin_base_path($item['uri']) }}">
+                            @endif
+                            <i class="fa {{$item['icon']}}"></i>
+                            <span>
+                    @if (starts_with($item['title'], "trans."))
+                                    {{ trans(mb_substr($item['title'],6))}}
+                                @else
+                                    {{ $item['title'] }}
+                                @endif
+                </span>
+                        </a>
         </li>
     @else
         <li class="treeview">
             <a href="#">
                 <i class="fa {{$item['icon']}}"></i>
-                <span>{{$item['title']}}</span>
+                <span>
+                    @if (starts_with($item['title'], "trans."))
+                        {{ trans(mb_substr($item['title'],6))}}
+                    @else
+                        {{ $item['title'] }}
+                    @endif
+                </span>
                 <i class="fa fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
