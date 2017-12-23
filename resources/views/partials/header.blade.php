@@ -40,7 +40,7 @@
                         <li class="user-header">
                             @if (empty(config('admin.hidden_avatar')) || !config('admin.hidden_avatar'))
                             <img src="{{ Admin::user()->avatar }}" class="img-circle" alt="User Image">
-                            @endif;
+                            @endif
                             <p>
                                 {{ Admin::user()->name }}
                                 <small>Member since admin {{ Admin::user()->created_at }}</small>

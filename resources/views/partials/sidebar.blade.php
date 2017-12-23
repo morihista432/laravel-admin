@@ -10,7 +10,7 @@
                 <img src="{{ Admin::user()->avatar }}" class="img-circle" alt="User Image">
                 @else
                     <br><br>
-                @endif;
+                @endif
             </div>
             <div class="pull-left info">
                 <p>{{ Admin::user()->name }}</p>
