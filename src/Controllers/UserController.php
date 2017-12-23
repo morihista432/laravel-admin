@@ -100,7 +100,9 @@ class UserController extends Controller
 
             $form->text('username', trans('admin.username'))->rules('required');
             $form->text('name', trans('admin.name'))->rules('required');
-            $form->image('avatar', trans('admin.avatar'));
+            if (empty(config('admin.hidden_avatar')) || !config('admin.hidden_avatar')) {
+                $form->image('avatar', trans('admin.avatar'));
+            }
             $form->password('password', trans('admin.password'))->rules('required|confirmed');
             $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required')
                 ->default(function ($form) {

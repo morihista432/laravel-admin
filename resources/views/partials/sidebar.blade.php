@@ -6,7 +6,11 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel">
             <div class="pull-left image">
+                @if (empty(config('admin.hidden_avatar')) || !config('admin.hidden_avatar'))
                 <img src="{{ Admin::user()->avatar }}" class="img-circle" alt="User Image">
+                @else
+                    <br><br>
+                @endif;
             </div>
             <div class="pull-left info">
                 <p>{{ Admin::user()->name }}</p>

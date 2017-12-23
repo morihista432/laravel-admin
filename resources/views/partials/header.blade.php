@@ -29,15 +29,18 @@
                     <!-- Menu Toggle Button -->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <!-- The user image in the navbar-->
+                        @if (empty(config('admin.hidden_avatar')) || !config('admin.hidden_avatar'))
                         <img src="{{ Admin::user()->avatar }}" class="user-image" alt="User Image">
+                        @endif;
                         <!-- hidden-xs hides the username on small devices so only the image appears. -->
                         <span class="hidden-xs">{{ Admin::user()->name }}</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- The user image in the menu -->
                         <li class="user-header">
+                            @if (empty(config('admin.hidden_avatar')) || !config('admin.hidden_avatar'))
                             <img src="{{ Admin::user()->avatar }}" class="img-circle" alt="User Image">
-
+                            @endif;
                             <p>
                                 {{ Admin::user()->name }}
                                 <small>Member since admin {{ Admin::user()->created_at }}</small>
