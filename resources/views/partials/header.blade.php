@@ -24,6 +24,10 @@
 
                 {!! Admin::getNavbar()->render() !!}
 
+                @if (!empty(config('admin.header_user_menu_add')))
+                    @include(config('admin.header_user_menu_add'))
+                @endif
+
                 <!-- User Account Menu -->
                 <li class="dropdown user user-menu">
                     <!-- Menu Toggle Button -->
@@ -31,7 +35,7 @@
                         <!-- The user image in the navbar-->
                         @if (empty(config('admin.hidden_avatar')) || !config('admin.hidden_avatar'))
                         <img src="{{ Admin::user()->avatar }}" class="user-image" alt="User Image">
-                        @endif;
+                        @endif
                         <!-- hidden-xs hides the username on small devices so only the image appears. -->
                         <span class="hidden-xs">{{ Admin::user()->name }}</span>
                     </a>
