@@ -466,9 +466,15 @@ class Model
         $relatedTable = $relation->getRelated()->getTable();
 
         if ($relation instanceof BelongsTo) {
+            if (str_contains($relation->getForeignKey(), '.')) {
+                $foreignKey = $relation->getForeignKey();
+            } else {
+                $foreignKey = $relation->getParent()->getTable() . '.' . $relation->getForeignKey();
+            }
+
             return [
                 $relatedTable,
-                $relation->getForeignKey(),
+                $foreignKey,
                 '=',
                 $relatedTable.'.'.$relation->getRelated()->getKeyName(),
             ];
