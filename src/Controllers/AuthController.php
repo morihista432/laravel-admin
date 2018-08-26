@@ -108,12 +108,12 @@ class AuthController extends Controller
     {
         return Administrator::form(function (Form $form) {
             $form->display('username', trans('admin.username'));
-            $form->text('name', trans('admin.name'))->rules('required');
+            $form->text('name', trans('admin.name'))->rules('required|string');
             if (empty(config('admin.hidden_avatar')) || !config('admin.hidden_avatar')) {
                 $form->image('avatar', trans('admin.avatar'));
             }
-            $form->password('password', trans('admin.password'))->rules('confirmed|required');
-            $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required')
+            $form->password('password', trans('admin.password'))->rules('confirmed|required|string');
+            $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required|string')
                 ->default(function ($form) {
                     return $form->model()->password;
                 });
