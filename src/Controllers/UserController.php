@@ -103,7 +103,10 @@ class UserController extends Controller
             if (empty(config('admin.hidden_avatar')) || !config('admin.hidden_avatar')) {
                 $form->image('avatar', trans('admin.avatar'));
             }
-            $form->password('password', trans('admin.password'))->rules('required|confirmed');
+            $form->password('password', trans('admin.password'))->rules('required|confirmed|string|min:8|regex:/\A(?=.*?[a-z])(?=.*?\d)(?=.*?[!-\/:-@[-`{-~])[!-~]{8,100}+\z/i',
+                [
+                    'regex' => '英数記号(!"\#$%&@\'()*+,-./_)を使い8文字以上で設定ください。'
+                ]);
             $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required')
                 ->default(function ($form) {
                     return $form->model()->password;
