@@ -3,6 +3,8 @@
 namespace Encore\Admin\Controllers;
 
 use Encore\Admin\Auth\Database\Administrator;
+use Encore\Admin\Auth\Database\AdminLoginLock;
+use Encore\Admin\Auth\Database\AdminLoginError;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Layout\Content;
@@ -12,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -46,11 +49,22 @@ class AuthController extends Controller
             return Redirect::back()->withInput()->withErrors($validator);
         }
 
+        if (AdminLoginLock::isLocked( $credentials['username'],config('admin.account_lock.lock_minutes')))
+        {
+            Log::info("account locked. : " . $credentials['username']);
+            return Redirect::back()->withInput()->withErrors(['username' => $this->getFailedLoginMessage()]);
+        }
+
+
+
         if (Auth::guard('admin')->attempt($credentials)) {
             admin_toastr(trans('admin.login_successful'));
 
             return redirect()->intended(config('admin.route.prefix'));
         }
+
+        // error save
+        AdminLoginError::addError($credentials['username'],config('admin.account_lock.limit_minutes'),config('admin.account_lock.limit_error'));
 
         return Redirect::back()->withInput()->withErrors(['username' => $this->getFailedLoginMessage()]);
     }
