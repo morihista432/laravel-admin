@@ -75,13 +75,6 @@ class AdminServiceProvider extends ServiceProvider
             /** @var Administrator $adminUser */
             $administrator = Admin::user();
 
-
-            Log::debug("admin_current_password:" . $administrator->id);
-            Log::debug("admin_current_password:" . $value);
-            Log::debug("admin_current_password:" . $administrator->getAuthPassword());
-
-
-
             return $administrator && Hash::check($value, $administrator->getAuthPassword());
         });
     }
