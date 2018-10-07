@@ -2,6 +2,8 @@
 
 namespace Encore\Admin\Controllers;
 
+
+use Carbon\Carbon;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Auth\Database\AdminLoginLock;
 use Encore\Admin\Auth\Database\AdminLoginError;
@@ -15,6 +17,8 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
+use Encore\Admin\Auth\Database\OperationLog as OperationLogModel;
+
 
 class AuthController extends Controller
 {
@@ -59,6 +63,24 @@ class AuthController extends Controller
 
         if (Auth::guard('admin')->attempt($credentials)) {
             admin_toastr(trans('admin.login_successful'));
+
+            // log add operation log
+            $log = [
+                'user_id' => Admin::user()->id,
+                'path'    => $request->path(),
+                'method'  => $request->method(),
+                'ip'      => $request->getClientIp(),
+                'input'   => json_encode(
+                    [
+                        'DATE' => Carbon::now()->format("Y/m/d H:i:s"),
+                        'HTTP_USER_AGENT' =>  $_SERVER['HTTP_USER_AGENT'],
+                        'REMOTE_IP' => $request->getClientIp(),
+                        'REMOTE_HOST' => gethostbyaddr($request->getClientIp())
+                    ]
+                ),
+            ];
+
+            OperationLogModel::create($log);
 
             return redirect()->intended(config('admin.route.prefix'));
         }
