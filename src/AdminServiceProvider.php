@@ -2,7 +2,12 @@
 
 namespace Encore\Admin;
 
+use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
+use Encore\Admin\Facades\Admin;
+use Illuminate\Support\Facades\Hash;
 
 class AdminServiceProvider extends ServiceProvider
 {
@@ -65,6 +70,20 @@ class AdminServiceProvider extends ServiceProvider
             $this->publishes([__DIR__.'/../database/migrations' => database_path('migrations')], 'laravel-admin-migrations');
             $this->publishes([__DIR__.'/../resources/assets' => public_path('vendor/laravel-admin')], 'laravel-admin-assets');
         }
+
+        Validator::extend('admin_current_password', function ($attribute, $value, $parameters, $validator) {
+            /** @var Administrator $adminUser */
+            $administrator = Admin::user();
+
+
+            Log::debug("admin_current_password:" . $administrator->id);
+            Log::debug("admin_current_password:" . $value);
+            Log::debug("admin_current_password:" . $administrator->getAuthPassword());
+
+
+
+            return $administrator && Hash::check($value, $administrator->getAuthPassword());
+        });
     }
 
     /**

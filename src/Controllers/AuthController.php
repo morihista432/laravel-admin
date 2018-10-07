@@ -126,6 +126,10 @@ class AuthController extends Controller
             if (empty(config('admin.hidden_avatar')) || !config('admin.hidden_avatar')) {
                 $form->image('avatar', trans('admin.avatar'));
             }
+            $form->password('password_current', trans('admin.password_current'))->rules('required|string|admin_current_password',
+                [
+                    'admin_current_password' => '現在のパスワードを入力してください。'
+                ]);
             $form->password('password', trans('admin.password'))->rules('confirmed|required|string|min:8|regex:/\A(?=.*?[a-z])(?=.*?\d)(?=.*?[!-\/:-@[-`{-~])[!-~]{8,100}+\z/i',
                 [
                     'regex' => '英数記号(!"\#$%&@\'()*+,-./_)を使い8文字以上で設定ください。'
@@ -137,7 +141,7 @@ class AuthController extends Controller
 
             $form->setAction(admin_base_path('auth/setting'));
 
-            $form->ignore(['password_confirmation']);
+            $form->ignore(['password_confirmation','password_current']);
 
             $form->saving(function (Form $form) {
                 if ($form->password && $form->model()->password != $form->password) {
