@@ -66,6 +66,10 @@ class AuthController extends Controller
 
             // log add operation log
             $clientIp = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $request->getClientIp();
+            $host = $clientIp;
+            if ($host AND !strpos($host, ":")){
+                $host = gethostbyaddr($host);
+            }
             $log = [
                 'user_id' => Admin::user()->id,
                 'path'    => $request->path(),
@@ -76,7 +80,7 @@ class AuthController extends Controller
                         'DATE' => Carbon::now()->format("Y/m/d H:i:s"),
                         'HTTP_USER_AGENT' =>  $_SERVER['HTTP_USER_AGENT'],
                         'REMOTE_IP' => $clientIp,
-                        'REMOTE_HOST' => gethostbyaddr($clientIp)
+                        'REMOTE_HOST' => $host
                     ]
                 ),
             ];
