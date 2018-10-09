@@ -66,10 +66,14 @@ class AuthController extends Controller
 
             // log add operation log
             $clientIp = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $request->getClientIp();
+            if (strpos($clientIp,",")){
+                $clientIps = explode(",",$clientIp);
+                $clientIp = $clientIps[0];
+            }
             $host = $clientIp;
-            //if ($host AND !strpos($host, ":")){
-            //    $host = gethostbyaddr($host);
-            //}
+            if ($host AND !strpos($host, ":")){
+                $host = gethostbyaddr($host);
+            }
             $log = [
                 'user_id' => Admin::user()->id,
                 'path'    => $request->path(),
