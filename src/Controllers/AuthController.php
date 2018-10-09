@@ -74,7 +74,7 @@ class AuthController extends Controller
                     [
                         'DATE' => Carbon::now()->format("Y/m/d H:i:s"),
                         'HTTP_USER_AGENT' =>  $_SERVER['HTTP_USER_AGENT'],
-                        'REMOTE_IP' => $request->getClientIp(),
+                        'REMOTE_IP' => isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $request->getClientIp(),
                         'REMOTE_HOST' => gethostbyaddr($request->getClientIp())
                     ]
                 ),
