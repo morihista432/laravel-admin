@@ -151,15 +151,15 @@ class AuthController extends Controller
             $form->password('password_current', trans('admin.password_current'))->rules('required|string|admin_current_password',
                 [
                     'admin_current_password' => '現在のパスワードを入力してください。'
-                ]);
+                ])->attribute("autocomplete","off");
             $form->password('password', trans('admin.password'))->rules('confirmed|required|string|min:8|regex:/\A(?=.*?[a-z])(?=.*?\d)(?=.*?[!-\/:-@[-`{-~])[!-~]{8,100}+\z/i',
                 [
                     'regex' => '英数記号(!"\#$%&@\'()*+,-./_)を使い8文字以上で設定ください。'
-                ]);
+                ])->attribute("autocomplete","off");
             $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required|string')
                 ->default(function ($form) {
                     return $form->model()->password;
-                });
+                })->attribute("autocomplete","off");
 
             $form->setAction(admin_base_path('auth/setting'));
 
